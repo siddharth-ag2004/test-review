@@ -1,0 +1,10 @@
+# Netlify builds config.js from environment variables (config.js itself is not stored in git).
+# Set SUPABASE_URL and SUPABASE_ANON_KEY (the publishable key) in Netlify > Site configuration > Environment variables.
+[build]
+  publish = "."
+  command = "printf 'export const SUPABASE_URL = \"%s\";\\nexport const SUPABASE_ANON_KEY = \"%s\";\\n' \"$SUPABASE_URL\" \"$SUPABASE_ANON_KEY\" > config.js"
+
+[build.environment]
+  # These two values are public by design (they end up in the site's JS), so don't let
+  # Netlify's secret scanner fail the build for finding them in config.js.
+  SECRETS_SCAN_OMIT_KEYS = "SUPABASE_URL,SUPABASE_ANON_KEY"
